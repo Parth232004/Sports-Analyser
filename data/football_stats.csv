@@ -1,0 +1,9 @@
+match,team,player,shots,shots_on_target,goals,passes,successful_passes
+Sample Match 1,Harbour FC,Aarav Shah,4,2,1,35,28
+Sample Match 1,Harbour FC,Rohan Patil,2,1,0,42,36
+Sample Match 1,City United,Dev Mehta,5,3,2,30,21
+Sample Match 1,City United,Arjun Rao,3,1,0,38,30
+Sample Match 2,Harbour FC,Aarav Shah,3,2,1,32,27
+Sample Match 2,Harbour FC,Rohan Patil,1,0,0,45,39
+Sample Match 2,City United,Dev Mehta,4,2,1,29,22
+Sample Match 2,City United,Arjun Rao,2,1,0,40,32
