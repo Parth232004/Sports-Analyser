@@ -6,13 +6,25 @@ A beginner-friendly football analytics dashboard built with Python, Pandas, Plot
 - CSV upload and input validation
 - Match and team filters
 - Goals, shots, shooting accuracy, and passing accuracy KPIs
-- Team comparison charts
-- Player statistics table
-- Rule-based descriptive match insights
+- Team performance comparison charts
+- Player statistics and performance reports
+- Player rankings based on goals, shooting accuracy, and passing accuracy
+- Top goal scorer identification
+- Best shooting and passing performer identification
+- Match-wise performance summary
+- Goals scored comparison across matches
+- Rule-based descriptive match and player insights
 - CSV export
 
 ## Important dataset note
-The included CSV is illustrative practice data, not real-world match data. Do not use it to make claims about actual teams or players. Replace it with a properly sourced dataset before presenting real-match conclusions.
+The reusable calculations and validation functions are in `analytics.py`; tests import that module without
+ launching the Streamlit interface.
+
+## Technologies Used
+- Python
+- Pandas
+- Plotly
+- Streamlit
 
 ## Run locally (macOS)
 ```bash
@@ -28,7 +40,8 @@ python -m pip install pytest
 pytest -q
 ```
 
-The reusable calculations and validation functions are in `analytics.py`; tests import that module without launching the Streamlit interface.
+The reusable calculations and validation functions are in `analytics.py`; tests import that module without
+ launching the Streamlit interface.
 
 ## CSV format
 Required columns:

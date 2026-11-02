@@ -64,8 +64,6 @@ st.metric(
     "Passing Accuracy",
     f"{completed / passes * 100:.1f}%" if passes else "N/A"
 )
-
-
 team_stats = df.groupby("team", as_index=False).agg(
     goals=("goals", "sum"),
     shots=("shots", "sum"),
@@ -81,7 +79,6 @@ team_stats["pass_accuracy_pct"] = (
     100 * team_stats["successful_passes"] /
     team_stats["passes"].replace(0, float("nan"))
 )
-
 # Day 4: Team Performance Comparison
 st.subheader("Team Performance Comparison")
 
@@ -404,7 +401,47 @@ if not player_stats.empty:
     )
 else:
     st.info("No player insights are available.")
+# Day 7: Match Performance Summary
 
+st.subheader("Match Performance Summary")
+
+match_stats = df.groupby("match", as_index=False).agg(
+    goals=("goals", "sum"),
+    total_shots=("shots", "sum"),
+    shots_on_target=("shots_on_target", "sum"),
+    total_passes=("passes", "sum"),
+    successful_passes=("successful_passes", "sum"),
+)
+
+match_stats["shooting_accuracy_pct"] = (
+    100 * match_stats["shots_on_target"]
+    / match_stats["total_shots"].replace(0, float("nan"))
+)
+
+match_stats["passing_accuracy_pct"] = (
+    100 * match_stats["successful_passes"]
+    / match_stats["total_passes"].replace(0, float("nan"))
+)
+
+st.dataframe(
+    match_stats.round(1),
+    use_container_width=True,
+    hide_index=True,
+)
+
+match_goals_chart = px.bar(
+    match_stats,
+    x="match",
+    y="goals",
+    color="match",
+    title="Goals Scored in Each Match",
+    text="goals",
+)
+
+st.plotly_chart(
+    match_goals_chart,
+    use_container_width=True,
+)
 st.subheader("Automated match insights")
 for insight in build_insights(df):
     st.write(f"- {insight}")
