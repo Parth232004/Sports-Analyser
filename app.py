@@ -278,6 +278,132 @@ st.dataframe(
     hide_index=True
 )
 
+# Day 6: Advanced Player Analytics
+
+st.subheader("Player Performance Rankings")
+
+# Rank players by goals
+player_stats["Goal Rank"] = (
+    player_stats["goals"]
+    .rank(method="min", ascending=False)
+    .astype(int)
+)
+
+# Rank players by shooting accuracy
+player_stats["Shooting Rank"] = (
+    player_stats["shooting_accuracy_pct"]
+    .rank(method="min", ascending=False)
+)
+
+# Rank players by passing accuracy
+player_stats["Passing Rank"] = (
+    player_stats["passing_accuracy_pct"]
+    .rank(method="min", ascending=False)
+)
+
+ranking_report = player_stats.sort_values(
+    ["Goal Rank", "Shooting Rank"],
+    ascending=True
+)
+
+st.dataframe(
+    ranking_report[
+        [
+            "team",
+            "player",
+            "goals",
+            "shooting_accuracy_pct",
+            "passing_accuracy_pct",
+            "Goal Rank",
+            "Shooting Rank",
+            "Passing Rank",
+        ]
+    ].round(1),
+    use_container_width=True,
+    hide_index=True,
+)
+
+st.subheader("Top Player Performers")
+
+# Top goal scorer
+if not player_stats.empty:
+    top_goals = player_stats["goals"].max()
+    top_scorers = player_stats[
+        player_stats["goals"] == top_goals
+    ]
+
+    st.write("**Top Goal Scorer**")
+
+    if top_goals > 0:
+        for _, player in top_scorers.iterrows():
+            st.write(
+                f"- {player['player']} ({player['team']}) "
+                f"— {int(player['goals'])} goal(s)"
+            )
+    else:
+        st.info("No goals were recorded.")
+
+    # Best shooting performer
+    shooting_players = player_stats.dropna(
+        subset=["shooting_accuracy_pct"]
+    )
+
+    st.write("**Best Shooting Performer**")
+
+    if not shooting_players.empty:
+        best_shooter = shooting_players.loc[
+            shooting_players["shooting_accuracy_pct"].idxmax()
+        ]
+
+        st.write(
+            f"- {best_shooter['player']} ({best_shooter['team']}) "
+            f"— {best_shooter['shooting_accuracy_pct']:.1f}% accuracy"
+        )
+    else:
+        st.info("No shooting accuracy data is available.")
+
+    # Best passing performer
+    passing_players = player_stats.dropna(
+        subset=["passing_accuracy_pct"]
+    )
+
+    st.write("**Best Passing Performer**")
+
+    if not passing_players.empty:
+        best_passer = passing_players.loc[
+            passing_players["passing_accuracy_pct"].idxmax()
+        ]
+
+        st.write(
+            f"- {best_passer['player']} ({best_passer['team']}) "
+            f"— {best_passer['passing_accuracy_pct']:.1f}% accuracy"
+        )
+    else:
+        st.info("No passing accuracy data is available.")
+
+# Automated player insights
+st.subheader("Automated Player Insights")
+
+if not player_stats.empty:
+    most_goals = player_stats["goals"].max()
+    most_goals_players = player_stats[
+        player_stats["goals"] == most_goals
+    ]
+
+    st.write(
+        f"- Highest goal tally: {int(most_goals)} goal(s)."
+    )
+
+    st.write(
+        f"- Number of players sharing the highest goal tally: "
+        f"{len(most_goals_players)}."
+    )
+
+    st.write(
+        f"- Players included in this analysis: {len(player_stats)}."
+    )
+else:
+    st.info("No player insights are available.")
 
 st.subheader("Automated match insights")
 for insight in build_insights(df):
